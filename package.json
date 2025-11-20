@@ -6,7 +6,9 @@
   "type": "module",
   "scripts": {
     "dev": "nodemon --exec node --loader ts-node/esm src/server.ts",
-    "test": "jest"
+    "test": "jest",
+    "build": "tsc",
+    "start": "node dist/server.js"
   },
   "author": "",
   "license": "ISC",
