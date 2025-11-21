@@ -4,6 +4,19 @@ The service accepts an **audio file URL**, performs a **mock transcription**, an
 
 ---
 
+## 🌐 Live Demo (Deployed on Render)
+
+### **Frontend (React)**
+🔗 https://voiceowl-frontend.onrender.com/
+
+### **Backend API**
+🔗 https://voiceowl-backend.onrender.com/api/
+
+---
+
+## 📸 Screenshot of UI  
+![VoiceOwl Screenshot](/mnt/data/b92a5027-89fb-43f1-9888-042c2decf934.png)
+
 ## 🚀 Features
 - Accept audio URL and generate transcription  
 - Mock transcription engine  
