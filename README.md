@@ -282,6 +282,136 @@ docker-compose up --build
 
 ---
 
+## 🧩 Part 2 – MongoDB Query & Indexing (Required)
+
+### ✔️ Query: Fetch transcriptions from the last 30 days  
+The `GET /transcriptions` endpoint retrieves only the records created within the last 30 days.  
+This is done using the `createdAt` field, which is automatically added by Mongoose because the schema uses `{ timestamps: true }`.
+
+```ts
+const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
+
+const results = await Transcription.find({
+  createdAt: { $gte: thirtyDaysAgo }
+});
+
+This ensures the database returns only recent transcription records without loading unnecessary documents.
+
+✔️ Index needed for 100M+ records
+
+If the dataset grows to 100 million+ transcription documents, scanning the entire collection for every “last 30 days” query becomes extremely expensive.
+
+To optimize this, we add an index on createdAt:
+
+TranscriptionSchema.index({ createdAt: 1 });
+
+
+🧠 Why this index is important
+Efficient range queries:
+MongoDB can instantly locate documents within a time window (e.g., last 30 days) without scanning the full collection.
+
+Enables index-based filtering:
+Queries like
+
+{ "createdAt": { "$gte": "2025-01-01" } }
+
+are extremely fast when a createdAt index exists.
+Critical at scale:
+With tens of millions of documents, not having this index would result in:
+
+High CPU usage
+
+Slow response times
+
+Increased disk I/O
+
+Full collection scans on every request
+
+Allows TTL, sharding, and partitioning strategies:
+Time-based indexes are the foundation for:
+
+TTL cleanup jobs
+
+Time-range–based sharding keys
+
+Cold storage archiving strategies
+
+When querying large datasets (100M+ records), indexing createdAt is essential for fast time-range queries.
+It avoids full collection scans, improves query latency, reduces load on the database, and prepares the system for horizontal scaling methods like sharding or partition pruning.
+
+
+## 🏗️ Part 3 – Scalability & System Design (Required)
+
+### ✔️ Goal: Scale the service to handle 10k+ concurrent requests  
+To evolve this API into a production-grade, high-throughput system, several architectural improvements are required. Below is a concise and practical scaling strategy.
+
+---
+
+### 🔹 1. **Introduce Queues for Heavy/Async Tasks**  
+Directly transcribing audio inside the request cycle does **not** scale.  
+For high traffic, the service must offload work to a queue:
+
+- Use **Redis + BullMQ**, **RabbitMQ**, or **AWS SQS**
+- `/transcription` endpoint → pushes job to queue  
+- Worker processes handle:
+  - downloading audio  
+  - Azure speech transcription  
+  - database writes  
+
+**Benefits:**  
+- API stays fast and responsive  
+- Retries, dead-letter queues, and rate-limiting come for free  
+- Allows horizontal scaling of workers independently from the API layer  
+
+---
+
+### 🔹 2. **Horizontal Scaling with Containers + Load Balancer**  
+The backend should run in containers (Docker), deployed behind an auto-scaling load balancer:
+
+- Kubernetes (GKE/EKS/AKS), AWS ECS, or Render Autoscaling  
+- Multiple API instances → Load Balancer → Queue → Workers  
+- MongoDB Atlas cluster for scalable storage  
+
+This allows handling **10k+ concurrent connections** reliably.
+
+---
+
+### 🔹 3. **Caching to Reduce Load on the Database**  
+For repeated reads (e.g., frontend polling), use:
+
+- **Redis** for response caching  
+- Cache recent transcriptions  
+- Cache Azure API responses (if applicable)  
+
+This significantly reduces MongoDB read pressure.
+
+---
+
+### 🔹 4. **MongoDB Optimizations for Large Datasets**  
+With millions of documents, apply:
+
+- Proper indexes (e.g., `createdAt`, `audioUrl`)
+- Sharding (MongoDB Atlas)
+- TTL indexes if old data can expire automatically
+
+This ensures queries stay fast even with 100M+ records.
+
+---
+
+### 🔹 5. **CI/CD + Environment Separation**  
+To support rapid scaling and iteration:
+
+- GitHub Actions / GitLab CI for automated builds
+- Separate dev, staging, and production environments
+- Health checks, liveness probes, readiness probes
+
+---
+
+### ✔️ Summary  
+By combining **queue-based processing**, **horizontal scaling**, **proper indexing**, and **strategic caching**, the VoiceOwl transcription service can reliably scale to **tens of thousands of concurrent requests** with predictable performance and cost efficiency.
+
+
+
 ## 🤝 Contribution
 This repository is part of an evaluation and not open for external contributions.
 
