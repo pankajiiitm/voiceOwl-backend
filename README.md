@@ -15,7 +15,7 @@ The service accepts an **audio file URL**, performs a **mock transcription**, an
 ---
 
 ## 📸 Screenshot of UI  
-![VoiceOwl Screenshot](/mnt/data/b92a5027-89fb-43f1-9888-042c2decf934.png)
+![VoiceOwl Screenshot](/Screenshot 2025-11-21 103459.png)
 
 ## 🚀 Features
 - Accept audio URL and generate transcription  
