@@ -282,7 +282,7 @@ docker-compose up --build
 
 ---
 
-## 🧩 Part 2 – MongoDB Query & Indexing (Required)
+## 🧩 Part 2 – MongoDB Query & Indexing 
 
 ### ✔️ Query: Fetch transcriptions from the last 30 days  
 The `GET /transcriptions` endpoint retrieves only the records created within the last 30 days.  
@@ -339,11 +339,15 @@ Cold storage archiving strategies
 When querying large datasets (100M+ records), indexing createdAt is essential for fast time-range queries.
 It avoids full collection scans, improves query latency, reduces load on the database, and prepares the system for horizontal scaling methods like sharding or partition pruning.
 
+```
 
-## 🏗️ Part 3 – Scalability & System Design (Required)
+
+## 🏗️ Part 3 – Scalability & System Design 
 
 ### ✔️ Goal: Scale the service to handle 10k+ concurrent requests  
 To evolve this API into a production-grade, high-throughput system, several architectural improvements are required. Below is a concise and practical scaling strategy.
+
+```ts
 
 ---
 
@@ -409,6 +413,8 @@ To support rapid scaling and iteration:
 
 ### ✔️ Summary  
 By combining **queue-based processing**, **horizontal scaling**, **proper indexing**, and **strategic caching**, the VoiceOwl transcription service can reliably scale to **tens of thousands of concurrent requests** with predictable performance and cost efficiency.
+
+```
 
 
 
