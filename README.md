@@ -4,13 +4,38 @@ The service accepts an **audio file URL**, performs a **mock transcription**, an
 
 ---
 
-## 🌐 Live Demo (Deployed on Render)
+Replace your current section with this:
 
-### **Frontend (React)**
+🌐 Live Demo (Full Application)
+
+The deployed application consists of a React frontend that communicates with a fully deployed Node.js + TypeScript backend on Render.
+Although the frontend URL contains the word frontend, it represents the entire working system, because the UI directly consumes the deployed backend API.
+
+Live Web App (UI + Connected Backend API)
+
 🔗 https://voiceowl-frontend.onrender.com/
 
-### **Backend API**
+This is the complete working application where you can:
+
+Submit an audio URL
+
+Trigger transcription
+
+View stored results fetched from MongoDB
+
+Test the workflow end-to-end
+
+Backend REST API (Direct Access)
+
 🔗 https://voiceowl-backend.onrender.com/api/
+
+This is the raw backend API, accessible separately for testing using:
+
+Postman
+
+Curl
+
+API clients
 
 ---
 
