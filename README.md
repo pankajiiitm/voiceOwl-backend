@@ -4,7 +4,6 @@ The service accepts an **audio file URL**, performs a **mock transcription**, an
 
 ---
 
-Replace your current section with this:
 
 🌐 Live Demo (Full Application)
 
