@@ -17,7 +17,7 @@ The service accepts an **audio file URL**, performs a **mock transcription**, an
 ## 📸 Screenshot of Deployed Project
 
 <p align="center">
-  <img src="./screenshot.png" width="800" />
+  <img src="./voiceOwl.png" width="800" />
 </p>
 
 ## 🚀 Features
